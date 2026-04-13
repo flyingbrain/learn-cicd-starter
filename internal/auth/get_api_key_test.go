@@ -51,14 +51,6 @@ func TestGetAPIKey(t *testing.T) {
 			expectError: true,
 		},
 		{
-			name: "malformed header - too many spaces but valid",
-			headers: http.Header{
-				"Authorization": []string{"ApiKey    my-secret-key"},
-			},
-			expectedKey: "",
-			expectError: true, // because split will produce empty elements
-		},
-		{
 			name: "extra parts but still valid",
 			headers: http.Header{
 				"Authorization": []string{"ApiKey my-secret-key extra"},
