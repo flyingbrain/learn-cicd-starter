@@ -92,7 +92,7 @@ func main() {
 	srv := &http.Server{
 		Addr:        ":" + port,
 		Handler:     router,
-		ReadTimeout: 10,
+		ReadTimeout: 90000,
 	}
 
 	p, err := strconv.Atoi(port)
