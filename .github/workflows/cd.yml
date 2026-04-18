@@ -1,45 +1,45 @@
 name: cd
 
 on:
-push:
-branches: [main]
+  push:
+    branches: [main]
 
 env:
-PROJECT_ID: notely-493620
-REGION: us-central1
-REPOSITORY: notely-ar-repo
-IMAGE: notely-api
+  PROJECT_ID: notely-493620
+  REGION: us-central1
+  REPOSITORY: notely-ar-repo
+  IMAGE: notely-api
 
 jobs:
-deploy:
-runs-on: ubuntu-latest
+  deploy:
+    runs-on: ubuntu-latest
 
-steps:
-  - name: Checkout
-    uses: actions/checkout@v4
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
 
-  - name: Set up Go
-    uses: actions/setup-go@v5
-    with:
-      go-version: "1.26.0"
+      - name: Set up Go
+        uses: actions/setup-go@v5
+        with:
+          go-version: "1.26.0"
 
-  - name: Build Go binary
-    run: ./scripts/buildprod.sh
+      - name: Build Go binary
+        run: ./scripts/buildprod.sh
 
-  - name: Auth to GCP
-    uses: google-github-actions/auth@v2
-    with:
-      credentials_json: ${{ secrets.GCP_SA_KEY }}
-      project_id: ${{ env.PROJECT_ID }}
+      - name: Auth to GCP
+        uses: google-github-actions/auth@v2
+        with:
+          credentials_json: ${{ secrets.GCP_SA_KEY }}
+          project_id: ${{ env.PROJECT_ID }}
 
-  - name: Setup gcloud
-    uses: google-github-actions/setup-gcloud@v2
+      - name: Setup gcloud
+        uses: google-github-actions/setup-gcloud@v2
 
-  - name: Configure Docker
-    run: gcloud auth configure-docker $REGION-docker.pkg.dev
+      - name: Configure Docker
+        run: gcloud auth configure-docker $REGION-docker.pkg.dev
 
-  - name: Build and Push
-    run: |
-      gcloud builds submit \
-        --tag $REGION-docker.pkg.dev/$PROJECT_ID/$REPOSITORY/$IMAGE:${{ github.sha }} \
-        --tag $REGION-docker.pkg.dev/$PROJECT_ID/$REPOSITORY/$IMAGE:latest .
+      - name: Build and Push
+        run: |
+          gcloud builds submit \
+            --tag $REGION-docker.pkg.dev/$PROJECT_ID/$REPOSITORY/$IMAGE:${{ github.sha }} \
+            --tag $REGION-docker.pkg.dev/$PROJECT_ID/$REPOSITORY/$IMAGE:latest .
