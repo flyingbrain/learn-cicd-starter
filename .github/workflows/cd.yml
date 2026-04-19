@@ -46,4 +46,4 @@ jobs:
             --tag $REGION-docker.pkg.dev/$PROJECT_ID/$REPOSITORY/$IMAGE:latest .
 
       - name: Deploy to Cloud Run
-        run: gcloud run deploy notely --image REGION-docker.pkg.dev/PROJECT_ID/REPO_NAME/IMAGE:TAG --region REGION --allow-unauthenticated --project PROJECT_ID --max-instances=4
+        run: gcloud run deploy notely --image $REGION-docker.pkg.dev/$PROJECT_ID/$REPOSITORY/$IMAGE:latest --region $REGION --platform managed --allow-unauthenticated --project $PROJECT_ID --max-instances=4
